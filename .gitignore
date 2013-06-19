@@ -40,5 +40,7 @@ Thumbs.b
 
 # folder structures #
 #####################
-target/
-
+target/*
+*.settings
+*.classpath
+*.project
