@@ -8,10 +8,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tiles.TilesContainer;
+import org.apache.tiles.access.TilesAccess;
+
 /**
  * Servlet implementation class ServiceRequestHandler
  */
-public class ServiceRequestHandler extends HttpServlet {
+public class ServiceRequestHandler extends BasePageServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
@@ -27,8 +30,22 @@ public class ServiceRequestHandler extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("recieved reqeust in new servlet");
-		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/jsp/common/template.jsp");
-		rd.forward(request, response);
+		TilesContainer container = TilesAccess.getContainer(
+		        request.getSession().getServletContext());
+		
+		String requestAlreadySubmitted = (String)request.getSession().getAttribute(REQUEST_ALREADY_SUBMITTED);
+		System.err.println("value in session "+requestAlreadySubmitted);
+		if("true".equals(requestAlreadySubmitted))
+		{
+			container.render("requestalreadysubmitted", request, response);
+		}
+		else if("false".equals(requestAlreadySubmitted))
+		{
+			container.render("serviceresponse", request, response);
+		}
+		
+		
+		
 	}
 
 }
