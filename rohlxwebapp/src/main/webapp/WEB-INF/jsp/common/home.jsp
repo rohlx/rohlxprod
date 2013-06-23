@@ -97,14 +97,14 @@
 							<label for="inputName" class="control-label"><span
 								class="red">*</span>Name</label>
 							<div class="controls">
-								<input type="text" placeholder="Name" id="inputName"
+								<input type="text" placeholder="Name" id="inputName" name="name"
 									class="span4">
 							</div>
 						</div>
 						<div class="control-group">
 							<label for="inputEmail" class="control-label">Email</label>
 							<div class="controls">
-								<input type="text" placeholder="Email" id="inputEmail"
+								<input type="text" placeholder="Email" id="inputEmail" name="email"
 									class="span4">
 							</div>
 						</div>
@@ -112,7 +112,7 @@
 							<label for="inputPhone" class="control-label"><span
 								class="red">*</span>Phone</label>
 							<div class="controls">
-								<input type="text" placeholder="Phone" id="inputPhone"
+								<input type="text" placeholder="Phone" id="inputPhone" name="phone"
 									class="span4">
 							</div>
 						</div>
@@ -121,7 +121,7 @@
 								class="red">*</span>Message</label>
 							<div class="controls">
 								<textarea class="span4" id="inputContact"
-									placeholder="Please give a brief description of service needed"></textarea>
+									placeholder="Please give a brief description of service needed" name="message"></textarea>
 							</div>
 						</div>
 						<div class="control-group">

@@ -1,6 +1,7 @@
 package com.rohlx;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.tiles.TilesContainer;
 import org.apache.tiles.access.TilesAccess;
+
+import com.rohlx.util.email.EmailHelperUtil;
+import com.rohlx.util.email.EmailNotification;
 
 
 
@@ -43,6 +47,11 @@ public class HomePageServlet extends BasePageServlet {
 		String requestAlreadySubmitted = (String) request.getSession()
 				.getAttribute(REQUEST_ALREADY_SUBMITTED);
 		if (requestAlreadySubmitted == null) {
+			
+			//Get the body of the message
+			Map<String, String[]> values = request.getParameterMap();
+			
+			EmailNotification.sendEmail("mgmuhilan@gmail.com","project@rohlx.com", "New Web Request : "+EmailHelperUtil.getGeneratedRequestNumber(), EmailHelperUtil.buildBody(values));
 			// Need to call method to send email and other business process
 
 			request.getSession().setAttribute(REQUEST_ALREADY_SUBMITTED,
