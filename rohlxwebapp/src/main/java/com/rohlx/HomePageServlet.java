@@ -30,29 +30,31 @@ public class HomePageServlet extends BasePageServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		
+		// Tiles container 
 		TilesContainer container = TilesAccess.getContainer(
 		        request.getSession().getServletContext());
-		
 		container.render("homeresponse", request, response);
-		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("recieved reqeust");
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
 		String requestAlreadySubmitted = (String) request.getSession()
 				.getAttribute(REQUEST_ALREADY_SUBMITTED);
 		if (requestAlreadySubmitted == null) {
-			
-			//Get the body of the message
+
+			// Get the body of the message
 			Map<String, String[]> values = request.getParameterMap();
-			
-			EmailNotification.sendEmail("mgmuhilan@gmail.com","project@rohlx.com", "New Web Request : "+EmailHelperUtil.getGeneratedRequestNumber(), EmailHelperUtil.buildBody(values));
-			// Need to call method to send email and other business process
+
+			// Call method to send email and other business process
+			EmailNotification.sendEmail(
+					"mgmuhilan@gmail.com",
+					"project@rohlx.com",
+					"New Web Request : "
+							+ EmailHelperUtil.getGeneratedRequestNumber(),
+					EmailHelperUtil.buildBody(values));
 
 			request.getSession().setAttribute(REQUEST_ALREADY_SUBMITTED,
 					"false");

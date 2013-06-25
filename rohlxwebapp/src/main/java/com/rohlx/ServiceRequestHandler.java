@@ -29,12 +29,12 @@ public class ServiceRequestHandler extends BasePageServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("recieved reqeust in new servlet");
+		// getting their container
 		TilesContainer container = TilesAccess.getContainer(
 		        request.getSession().getServletContext());
 		
 		String requestAlreadySubmitted = (String)request.getSession().getAttribute(REQUEST_ALREADY_SUBMITTED);
-		System.err.println("value in session "+requestAlreadySubmitted);
+		
 		if("true".equals(requestAlreadySubmitted))
 		{
 			container.render("requestalreadysubmitted", request, response);

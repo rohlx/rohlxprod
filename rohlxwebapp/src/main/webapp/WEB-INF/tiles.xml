@@ -3,17 +3,20 @@
        "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
-  <definition name="homeresponse" template="/WEB-INF/jsp/common/template.jsp">
-    <put-attribute name="body" value="/WEB-INF/jsp/common/home.jsp" />
-  </definition>
-   <definition name="contenttemplate" template="/WEB-INF/jsp/common/template.jsp">
-    <put-attribute name="body" value="/WEB-INF/jsp/common/serviceresponse.jsp" />
-  </definition>
-  <definition name="serviceresponse" extends="contenttemplate" >
-    <put-attribute name="content" value="/WEB-INF/jsp/common/serviceresponsecontent.jsp" cascade="true"/>
-  </definition>
-  <definition name="requestalreadysubmitted" extends="contenttemplate">
-    <put-attribute name="content" value="/WEB-INF/jsp/common/requestalreadysubmittedcontent.jsp" cascade="true"/>
-  </definition>
-  
+	<definition name="homeresponse" template="/WEB-INF/jsp/common/template.jsp">
+		<put-attribute name="body" value="/WEB-INF/jsp/common/home.jsp" />
+	</definition>
+	<definition name="contenttemplate" template="/WEB-INF/jsp/common/template.jsp">
+		<put-attribute name="body"
+			value="/WEB-INF/jsp/common/serviceresponse.jsp" />
+	</definition>
+	<definition name="serviceresponse" extends="contenttemplate">
+		<put-attribute name="content"
+			value="/WEB-INF/jsp/common/serviceresponsecontent.jsp" cascade="true" />
+	</definition>
+	<definition name="requestalreadysubmitted" extends="contenttemplate">
+		<put-attribute name="content"
+			value="/WEB-INF/jsp/common/requestalreadysubmittedcontent.jsp"
+			cascade="true" />
+	</definition>
 </tiles-definitions>

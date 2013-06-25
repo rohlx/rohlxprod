@@ -1,6 +1,7 @@
+/** Custom javascript for rohlx **/
 
 
-
+/** Function to add the marker for rohlx **/
 function addMarker(map,latlong,title,content)
 {
   var markerOptions = {
@@ -12,6 +13,7 @@ function addMarker(map,latlong,title,content)
   var marker = new google.maps.Marker(markerOptions);
 }
 
+/** Loads and Initializes sript when the address link is clicked **/
 function initialize() {
   var googleLatandLogRohlx = new google.maps.LatLng(8.148,77.568455);	
   var mapOptions = {
@@ -28,13 +30,12 @@ function initialize() {
   $('#map-canvas')[0].scrollIntoView();
   
   addMarker(map,googleLatandLogRohlx,"Rohlx","Rohlx1"); 
-  
  
 }
 
+/** Call to load google maps script **/
 function loadScript() {
     
-  
   if(!isGoogleAPILoadedAlready())
   {
   var script = document.createElement('script');
@@ -46,6 +47,7 @@ function loadScript() {
   
 } 
 
+/** Script to add animation to load the sections for the menus **/
 function animate(){
 $('.scroller').click(function(){
 var section = $($(this).data("section"));
@@ -55,9 +57,8 @@ return false;
 });
 }
 
-
+/** This function checks if the javascript to load the google api is already loaded or not **/
 function isGoogleAPILoadedAlready(){
-    
     if($('script[src*="maps.googleapis.com"]').val() === undefined)
     {
         return false;
@@ -66,5 +67,6 @@ function isGoogleAPILoadedAlready(){
 }
 
 
+/** Other things to be loaded **/
 $("#openmaps").unbind().click(loadScript);
 $(window).load(animate);

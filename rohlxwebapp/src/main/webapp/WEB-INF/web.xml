@@ -27,5 +27,4 @@
     <servlet-name>ServiceRequestHandler</servlet-name>
     <url-pattern>/servicerequest</url-pattern>
   </servlet-mapping>
-
 </web-app>

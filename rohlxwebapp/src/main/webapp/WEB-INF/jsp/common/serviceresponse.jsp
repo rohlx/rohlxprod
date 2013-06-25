@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 
 <body>
 	<div class="navbar navbar-fixed-top">
@@ -11,7 +11,7 @@
 					<a href="index.html" class="banner scroller" data-section="#intro">Rohlx
 						Technologies</a>
 				</div>
-				
+
 			</div>
 		</div>
 	</div>
@@ -31,8 +31,8 @@
 			</div>
 			<!-- #about us -->
 		</div>
-		</div>
-		</body>
-		
+	</div>
+</body>
+
 
 
