@@ -18,14 +18,6 @@ public class ServiceRequestHandler extends BasePageServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ServiceRequestHandler() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
