@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tiles.TilesContainer;
 import org.apache.tiles.access.TilesAccess;
 
@@ -23,7 +26,7 @@ import com.rohlx.util.email.EmailNotification;
 public class HomePageServlet extends BasePageServlet {
 	private static final long serialVersionUID = 1L;
 	
-
+	Logger logger = LogManager.getLogger(HomePageServlet.class.getName());
        
    
 	/**
@@ -34,6 +37,7 @@ public class HomePageServlet extends BasePageServlet {
 		TilesContainer container = TilesAccess.getContainer(
 		        request.getSession().getServletContext());
 		container.render("homeresponse", request, response);
+		logger.log(Level.ERROR, "log4j testing here");
 	}
 
 	/**
@@ -47,14 +51,25 @@ public class HomePageServlet extends BasePageServlet {
 
 			// Get the body of the message
 			Map<String, String[]> values = request.getParameterMap();
+			
+			String requestNumber = EmailHelperUtil.getGeneratedRequestNumber(); 
+			
+			logger.log(Level.ERROR, "generated request no"+requestNumber);
 
 			// Call method to send email and other business process
-			EmailNotification.sendEmail(
+			if(!EmailNotification.sendEmail(
 					"mgmuhilan@gmail.com",
 					"project@rohlx.com",
 					"New Web Request : "
-							+ EmailHelperUtil.getGeneratedRequestNumber(),
-					EmailHelperUtil.buildBody(values));
+							+ requestNumber,
+					EmailHelperUtil.buildBody(values)))
+			{
+				throw new RuntimeException();
+			}
+			else
+			{
+				request.getSession().setAttribute("requestNumber",requestNumber);
+			}
 
 			request.getSession().setAttribute(REQUEST_ALREADY_SUBMITTED,
 					"false");

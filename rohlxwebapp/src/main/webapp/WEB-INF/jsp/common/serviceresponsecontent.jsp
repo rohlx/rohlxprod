@@ -1,1 +1,1 @@
-<p class="text">Your service request number is : 123456</p>
+<p class="text">Your service request number is : <%=session.getAttribute("requestNumber")%></p>
