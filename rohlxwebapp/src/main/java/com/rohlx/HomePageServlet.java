@@ -1,9 +1,7 @@
 package com.rohlx;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,7 +16,6 @@ import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
 import org.apache.bval.jsr303.ApacheValidationProvider;
-import org.apache.bval.jsr303.groups.Group;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,26 +74,8 @@ public class HomePageServlet extends BasePageServlet {
 			logger.log(Level.ERROR, "generated request no"+requestNumber);
 			
 			
-			ValidatorFactory vf = 
-				    Validation.byProvider(ApacheValidationProvider.class).configure().buildValidatorFactory();
-			System.out.println("sdsdsdsdsds"+vf.getValidator());
-			Set<ConstraintViolation<RequestForm>> results = vf.getValidator().validate((RequestForm)HttpSessionHelper.getSession(request).getAttribute("requestDetails"), Default.class);
-			
-			if(results!=null && results.size() >0)
-			{
-				Map<String,String> error = new HashMap<String,String>(results.size());
-				for(ConstraintViolation<RequestForm> result : results)
-				{
-					System.out.println("1 :"+result.getMessage());
-					System.out.println("2 :"+result.getInvalidValue());
-					System.out.println("3 :"+result.getPropertyPath());
-					error.put(result.getPropertyPath().toString(),result.getMessage());
-				}
-				HttpSessionHelper.getSession(request).setAttribute("error", error);
-				logger.log(Level.ERROR, "results"+error);
-				response.sendRedirect("/home");
+			if(!validateForm(request, response))
 				return;
-			}
 			
 			
 			
@@ -131,6 +110,36 @@ public class HomePageServlet extends BasePageServlet {
 					.setAttribute(REQUEST_ALREADY_SUBMITTED, "true");
 		}
 		response.sendRedirect("/servicerequest");
+	}
+
+	private boolean validateForm(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		ValidatorFactory vf = 
+			    Validation.byProvider(ApacheValidationProvider.class).configure().buildValidatorFactory();
+		
+		Set<ConstraintViolation<RequestForm>> results = vf.getValidator().validate((RequestForm)HttpSessionHelper.getSession(request).getAttribute("requestDetails"), Default.class);
+		
+		if(results!=null && results.size() >0)
+		{
+			Map<String,String> error = new HashMap<String,String>(results.size());
+			for(ConstraintViolation<RequestForm> result : results)
+			{
+				if(error.containsKey(result.getPropertyPath()))
+				{
+					error.put(result.getPropertyPath().toString(), error.get(result.getPropertyPath().toString())+"<br/>"+result.getMessage());
+				}
+				else
+				{
+					error.put(result.getPropertyPath().toString(),result.getMessage());
+				}
+			}
+			
+			HttpSessionHelper.getSession(request).setAttribute("error", error);
+			logger.log(Level.ERROR, "results"+error);
+			response.sendRedirect("/home");
+			return false;
+		}
+		return true;
 	}
 
 	private void mapRequestToBean(Map<String, String[]> parameterMap,

@@ -49,7 +49,10 @@
 
 			<div class="container">
 				<div class="row span6 center" id="alignImage">
-					
+					<c:if test="${not empty error}">
+						<div class="red">Errors!!! Please scroll down to fix the
+							errors</div>
+					</c:if>
 					<img src="img/rohlx.jpg" />
 					<h1>Making a difference !!!!</h1>
 					<p class="text">Our Mission is to maximize the business success
@@ -57,10 +60,8 @@
 						installation and maintenance support and help our customers thus,
 						achieve their goals.</p>
 						<p>
-						<c:forEach var="message" items="${error}">
-  							<c:out value="${message.key}" /><c:out value="${message.value}" /><<br/>
-						</c:forEach>
-						</p>
+						
+						
 				</div>
 			</div>
 			<!-- #about us -->
@@ -106,6 +107,7 @@
 							<label for="inputName" class="control-label"><span
 								class="red">*</span>Name</label>
 							<div class="controls">
+								<div class="red" id="name"><c:out value="${error.name}" /></div>
 								<input  type="text" placeholder="Name" id="inputName" name="name"
 									class="span4">
 							</div>
@@ -113,6 +115,7 @@
 						<div class="control-group">
 							<label for="inputEmail" class="control-label">Email</label>
 							<div class="controls">
+								<div class="red" id="name"><c:out value="${error.email}" /></div>
 								<input   type="text" placeholder="Email" id="inputEmail" name="email"
 									class="span4">
 							</div>
@@ -121,6 +124,7 @@
 							<label for="inputPhone" class="control-label"><span
 								class="red">*</span>Phone</label>
 							<div class="controls">
+								<div class="red" id="name"><c:out value="${error.phone}" /></div>
 								<input  type="text" placeholder="Phone" id="inputPhone" name="phone"
 									class="span4">
 							</div>
@@ -129,6 +133,7 @@
 							<label for="inputContact" class="control-label"><span
 								class="red">*</span>Message</label>
 							<div class="controls">
+								<div class="red" id="name"><c:out value="${error.message}" /></div>
 								<textarea  class="span4" id="inputContact"
 									placeholder="Please give a brief description of service needed" name="message"></textarea>
 							</div>
