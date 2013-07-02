@@ -70,6 +70,12 @@ var rohlx = rohlx || {};
 		}
 		return true;
 	};
+        
+        /** public function to check for validation errors and display next to tag **/
+        
+        mod.displayErrorMessage = function(){
+            
+        }
 
 })($, rohlx);
 

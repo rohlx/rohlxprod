@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,15 +13,16 @@
 <link href="css/bootstrap-responsive.min.css" rel="stylesheet"
 	media="screen">
 </head>
+
 <body>
 
 <tiles:insertAttribute name="body" />
 
+</body>
 
 <%-- js imports --%>
 <script src="js/jquery.js"></script>
 <script src="js/rohlxcustom.js"></script>
 <script src="js/bootstrap.min.js"></script>
 
-</body>
 </html>

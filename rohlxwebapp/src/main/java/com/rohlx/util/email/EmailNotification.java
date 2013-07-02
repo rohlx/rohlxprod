@@ -10,26 +10,17 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.rohlx.util.PropertiesHelper;
+
 public class EmailNotification {
-	public static Properties prop = new Properties();
+	public static Properties prop = PropertiesHelper.getPropertiesFile();
 
 	public static boolean sendEmail(String aFromEmailAddr, String aToEmailAddr,
 			String aSubject, String aBody) {
 		
 		boolean emailSent = true;
 
-		try {
-
-			prop.load(Thread.currentThread().getContextClassLoader()
-					.getResourceAsStream("/config.properties"));
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-			System.out.println("###"+e.getMessage());
-			throw new RuntimeException();
-
-		}
+		
 		Session session = Session.getDefaultInstance(prop,
 				new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
