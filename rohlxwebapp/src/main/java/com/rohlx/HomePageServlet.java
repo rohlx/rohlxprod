@@ -97,14 +97,7 @@ public class HomePageServlet extends BasePageServlet {
 
 			request.getSession().setAttribute(REQUEST_ALREADY_SUBMITTED,
 					"false");
-			
-			
-			logger.log(Level.ERROR, "requestform object"+((RequestForm)request.getSession().getAttribute("requestDetails")).getName());
-			
-			logger.log(Level.ERROR, "requestform object"+((RequestForm)request.getSession().getAttribute("requestDetails")).getEmail());
-			logger.log(Level.ERROR, "requestform object"+((RequestForm)request.getSession().getAttribute("requestDetails")).getMessage());
-			logger.log(Level.ERROR, "requestform object"+((RequestForm)request.getSession().getAttribute("requestDetails")).getPhone());
-			
+
 		} else if ("false".equals(requestAlreadySubmitted)) {
 			request.getSession()
 					.setAttribute(REQUEST_ALREADY_SUBMITTED, "true");
@@ -114,28 +107,31 @@ public class HomePageServlet extends BasePageServlet {
 
 	private boolean validateForm(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
-		ValidatorFactory vf = 
-			    Validation.byProvider(ApacheValidationProvider.class).configure().buildValidatorFactory();
-		
-		Set<ConstraintViolation<RequestForm>> results = vf.getValidator().validate((RequestForm)HttpSessionHelper.getSession(request).getAttribute("requestDetails"), Default.class);
-		
-		if(results!=null && results.size() >0)
-		{
-			Map<String,String> error = new HashMap<String,String>(results.size());
-			for(ConstraintViolation<RequestForm> result : results)
-			{
-				if(error.containsKey(result.getPropertyPath()))
-				{
-					error.put(result.getPropertyPath().toString(), error.get(result.getPropertyPath().toString())+"<br/>"+result.getMessage());
-				}
-				else
-				{
-					error.put(result.getPropertyPath().toString(),result.getMessage());
+		ValidatorFactory vf = Validation
+				.byProvider(ApacheValidationProvider.class).configure()
+				.buildValidatorFactory();
+
+		Set<ConstraintViolation<RequestForm>> results = vf.getValidator()
+				.validate(
+						(RequestForm) HttpSessionHelper.getSession(request)
+								.getAttribute("requestDetails"), Default.class);
+
+		if (results != null && results.size() > 0) {
+			Map<String, String> error = new HashMap<String, String>(
+					results.size());
+			for (ConstraintViolation<RequestForm> result : results) {
+				if (error.containsKey(result.getPropertyPath())) {
+					error.put(result.getPropertyPath().toString(),
+							error.get(result.getPropertyPath().toString())
+									+ "<br/>" + result.getMessage());
+				} else {
+					error.put(result.getPropertyPath().toString(),
+							result.getMessage());
 				}
 			}
-			
+
 			HttpSessionHelper.getSession(request).setAttribute("error", error);
-			logger.log(Level.ERROR, "results"+error);
+			logger.log(Level.ERROR, "results" + error);
 			response.sendRedirect("/home");
 			return false;
 		}
