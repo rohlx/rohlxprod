@@ -44,3 +44,7 @@ target/
 *.settings
 *.classpath
 *.project
+
+
+# ignore the mongo db conf file
+rohlxmongodb.conf

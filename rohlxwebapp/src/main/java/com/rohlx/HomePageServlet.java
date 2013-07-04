@@ -23,6 +23,8 @@ import org.apache.tiles.TilesContainer;
 import org.apache.tiles.access.TilesAccess;
 
 import com.rohlx.bean.RequestForm;
+import com.rohlx.dao.MongoDBDAO;
+import com.rohlx.dao.MongoFactory;
 import com.rohlx.util.HttpSessionHelper;
 import com.rohlx.util.PropertiesHelper;
 import com.rohlx.util.email.EmailHelperUtil;
@@ -77,7 +79,7 @@ public class HomePageServlet extends BasePageServlet {
 			if(!validateForm(request, response))
 				return;
 			
-			
+			persistRecord(request.getParameterMap());
 			
 			
 			// Call method to send email and other business process
@@ -103,6 +105,11 @@ public class HomePageServlet extends BasePageServlet {
 					.setAttribute(REQUEST_ALREADY_SUBMITTED, "true");
 		}
 		response.sendRedirect("/servicerequest");
+	}
+
+	private void persistRecord(Map inputs) {
+		MongoDBDAO.insertRequestData(inputs);
+		
 	}
 
 	private boolean validateForm(HttpServletRequest request,

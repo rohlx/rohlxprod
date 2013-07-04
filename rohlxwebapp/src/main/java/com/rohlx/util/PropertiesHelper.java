@@ -16,9 +16,10 @@ public class PropertiesHelper {
 		try {
 
 			logger.log(Level.ERROR, "thread info");
+			logger.log(Level.ERROR, Thread.currentThread().getContextClassLoader());
 			prop.load(Thread.currentThread().getContextClassLoader()
 					.getResourceAsStream("/config.properties"));
-			logger.log(Level.ERROR, Thread.currentThread().getContextClassLoader());
+			
 
 		} catch (Exception e) {
 
