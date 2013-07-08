@@ -16,85 +16,86 @@ import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
 import org.apache.bval.jsr303.ApacheValidationProvider;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.tiles.TilesContainer;
-import org.apache.tiles.access.TilesAccess;
+import org.apache.log4j.Logger;
 
 import com.rohlx.bean.RequestForm;
 import com.rohlx.dao.MongoDBDAO;
-import com.rohlx.dao.MongoFactory;
 import com.rohlx.util.HttpSessionHelper;
 import com.rohlx.util.PropertiesHelper;
 import com.rohlx.util.email.EmailHelperUtil;
 import com.rohlx.util.email.EmailNotification;
-
-
 
 /**
  * Servlet implementation class HomePageServlet
  */
 public class HomePageServlet extends BasePageServlet {
 	private static final long serialVersionUID = 1L;
-	
-	Logger logger = LogManager.getLogger(HomePageServlet.class.getName());
-       
-   
+
+	 static Logger log = Logger.getLogger(
+			 HomePageServlet.class.getName());
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Tiles container 
-		TilesContainer container = TilesAccess.getContainer(
-		        request.getSession().getServletContext());
-		container.render("homeresponse", request, response);
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		log.info(" Entering method : doGet");
 		
-		request.getSession().setAttribute("requestDetails", new RequestForm());
-		logger.log(Level.ERROR, "log4j testing here");
+		createTilesContainer(request).render("homeresponse", request,response);
+
+		log.info("Exiting method : doGet");
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		
-		mapRequestToBean(request.getParameterMap(),HttpSessionHelper.getSession(request));
-		
+		log.info(" Entering method : doPost");
+
+		mapRequestToBean(request.getParameterMap(),
+				HttpSessionHelper.getSession(request));
+
 		//
-		
+
 		String requestAlreadySubmitted = (String) request.getSession()
 				.getAttribute(REQUEST_ALREADY_SUBMITTED);
 		if (requestAlreadySubmitted == null) {
 
 			// Get the body of the message
 			Map<String, String[]> values = request.getParameterMap();
-			
-			String requestNumber = EmailHelperUtil.getGeneratedRequestNumber(); 
-			
-			logger.log(Level.ERROR, "generated request no"+requestNumber);
-			
-			
-			if(!validateForm(request, response))
+
+			String requestNumber = EmailHelperUtil.getGeneratedRequestNumber();
+
+//			logger.log(Level.ERROR, "generated request no" + requestNumber);
+
+			if (!validateForm(request, response)) {
+//				logger.log(Level.ERROR, "There are validation errors");
 				return;
-			
-			persistRecord(request.getParameterMap());
-			
-			
-			// Call method to send email and other business process
-			if(PropertiesHelper.getPropertiesFile().getProperty("sentMail").equals("true") && !EmailNotification.sendEmail(
-					"mgmuhilan@gmail.com",
-					"project@rohlx.com",
-					"New Web Request : "
-							+ requestNumber,
-					EmailHelperUtil.buildBody(values)))
-			{
-				throw new RuntimeException();
 			}
-			else
-			{
-				request.getSession().setAttribute("requestNumber",requestNumber);
+
+			// StoreServiceRequestRESTClient.storeRequest(requestNumber,
+			// createMap(values));
+			//
+			// persistRecord(request.getParameterMap());
+			boolean status = false;
+			// Call method to send email and other business process
+			if (PropertiesHelper.getPropertiesFile().getProperty("sendMail")
+					.equals("true")) {
+				status = EmailNotification.sendEmail("mgmuhilan@gmail.com",
+						"project@rohlx.com", "New Web Request : "
+								+ requestNumber,
+						EmailHelperUtil.buildBody(values));
+			}
+
+			if (!status) {
+				throw new RuntimeException();
+			} else {
+				request.getSession().setAttribute("requestNumber",
+						requestNumber);
 			}
 
 			request.getSession().setAttribute(REQUEST_ALREADY_SUBMITTED,
@@ -105,11 +106,12 @@ public class HomePageServlet extends BasePageServlet {
 					.setAttribute(REQUEST_ALREADY_SUBMITTED, "true");
 		}
 		response.sendRedirect("/servicerequest");
+		log.info("Exiting method : doPost");
 	}
 
 	private void persistRecord(Map inputs) {
 		MongoDBDAO.insertRequestData(inputs);
-		
+
 	}
 
 	private boolean validateForm(HttpServletRequest request,
@@ -138,7 +140,7 @@ public class HomePageServlet extends BasePageServlet {
 			}
 
 			HttpSessionHelper.getSession(request).setAttribute("error", error);
-			logger.log(Level.ERROR, "results" + error);
+//			logger.log(Level.ERROR, "results" + error);
 			response.sendRedirect("/home");
 			return false;
 		}
@@ -152,9 +154,16 @@ public class HomePageServlet extends BasePageServlet {
 		rf.setPhone(parameterMap.get("phone")[0]);
 		rf.setEmail(parameterMap.get("email")[0]);
 		rf.setMessage(parameterMap.get("message")[0]);
-		
+
 		session.setAttribute("requestDetails", rf);
-		
+
 	}
 
+	private Map<String, String> createMap(Map<String, String[]> parameterMap) {
+		Map<String, String> map = new HashMap<String, String>();
+		for (String key : parameterMap.keySet()) {
+			map.put(key, parameterMap.get(key)[0]);
+		}
+		return map;
+	}
 }

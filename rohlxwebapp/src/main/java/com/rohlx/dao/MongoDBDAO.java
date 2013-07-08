@@ -4,9 +4,8 @@ import java.net.UnknownHostException;
 import java.util.GregorianCalendar;
 import java.util.Map;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -16,7 +15,7 @@ import com.mongodb.MongoClient;
 
 public class MongoDBDAO {
 
-	Logger logger = LogManager.getLogger(MongoDBDAO.class.getName());
+	static Logger log = LogManager.getLogger(MongoDBDAO.class.getName());
 
 	public static Mongo connection;
 
@@ -24,7 +23,7 @@ public class MongoDBDAO {
 
 		try {
 			connection = new MongoClient();
-			logger.log(Level.ERROR, connection.getVersion());
+			log.info(connection.getVersion());
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
