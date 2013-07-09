@@ -10,17 +10,19 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.log4j.Logger;
+
 import com.rohlx.util.PropertiesHelper;
 
 public class EmailNotification {
 	public static Properties prop = PropertiesHelper.getPropertiesFile();
+	static Logger log = Logger.getLogger(EmailNotification.class.getName());
 
 	public static boolean sendEmail(String aFromEmailAddr, String aToEmailAddr,
 			String aSubject, String aBody) {
-		
+
 		boolean emailSent = true;
 
-		
 		Session session = Session.getDefaultInstance(prop,
 				new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
@@ -29,17 +31,18 @@ public class EmailNotification {
 								.getProperty("password"));
 					}
 				});
+
 		MimeMessage message = new MimeMessage(session);
 		try {
-			
+
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					aToEmailAddr));
 			message.setSubject(aSubject);
 			message.setText(aBody);
 			Transport.send(message);
 		} catch (MessagingException ex) {
-			ex.printStackTrace();
-			System.err.println("Cannot send email. " + ex);
+			log.fatal("unable to send email", ex);
+			emailSent = false;
 		}
 		return emailSent;
 	}

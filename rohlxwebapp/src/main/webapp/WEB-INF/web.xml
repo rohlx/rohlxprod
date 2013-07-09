@@ -4,12 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<display-name>rohlxwebapp</display-name>
-	<!-- <listener>
-		<listener-class>org.apache.tiles.extras.complete.CompleteAutoloadTilesListener</listener-class>
-	</listener> -->
-	<!--  <listener>
-		<listener-class>org.apache.tiles.web.startup.simple.SimpleTilesInitializerServlet</listener-class>
-	</listener>  -->
+	
 	 <listener>
 		<listener-class>org.apache.tiles.web.startup.TilesListener</listener-class>
 	</listener> 
@@ -19,7 +14,7 @@
 		<param-value>/WEB-INF/tiles.xml</param-value>
 	</context-param>
 	<session-config>
-		<session-timeout>10</session-timeout>
+		<session-timeout>2</session-timeout>
 	</session-config>
 	<servlet>
 		<description></description>
