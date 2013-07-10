@@ -1,5 +1,6 @@
 package com.rohlx.bean;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -8,9 +9,6 @@ import org.apache.bval.constraints.NotEmpty;
 
 public class RequestForm extends BaseForm{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@NotNull
@@ -19,6 +17,8 @@ public class RequestForm extends BaseForm{
 	
 	@NotNull
 	@NotEmpty(message="Please provide a phone number")
+	@Size(min=10,max=10,message="Please provide a valid phone number")
+	@Digits(integer=10,fraction=0,message="Please provide a valid phone number")
 	private String phone;
 	
 	@Email(message="Please provide a valid email")
@@ -28,6 +28,16 @@ public class RequestForm extends BaseForm{
 	@NotEmpty(message="Please enter the message")
 	@Size(min=20, max=200, message="Message should be between 20 to 200 words")
 	private String message;
+	
+	private String requestNumber;
+	
+	public String getRequestNumber() {
+		return requestNumber;
+	}
+
+	public void setRequestNumber(String requestNumber) {
+		this.requestNumber = requestNumber;
+	}
 
 	public String getName() {
 		return name;
@@ -60,6 +70,4 @@ public class RequestForm extends BaseForm{
 	public void setMessage(String comment) {
 		this.message = comment;
 	}
-	
-
 }

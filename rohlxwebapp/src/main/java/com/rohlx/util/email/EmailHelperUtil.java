@@ -6,15 +6,26 @@ import java.util.Map;
 
 public class EmailHelperUtil {
 
-	public static String buildBody(Map<String, String[]> values) {
-		String email = values.get("email")[0];
-		String phone = values.get("phone")[0];
-		String name = values.get("name")[0];
-		String message = values.get("message")[0];
+	public static String buildBody(Map<String, String> values) {
+		String email = values.get("email");
+		String phone = values.get("phone");
+		String name = values.get("name");
+		String message = values.get("message");
 
-		return "Hi, Please find the message from customer " + name + "\n"
-				+ message + "\n" + "Phone Number : " + phone + "\n"
-				+ " Email  : " + email;
+		StringBuilder sb = new StringBuilder();
+		sb.append("Dear Rohlx Service Engineers,").append("\n\n")
+				.append("Please find the message from customer <strong>")
+				.append(name).append("<strong>").append(".").append("\n\n");
+
+		sb.append("Message :").append(message).append("\n\n");
+		sb.append("Phone Number :").append(phone).append("\n\n");
+
+		if (email != null)
+			sb.append("Email :").append(email).append("\n\n");
+
+		sb.append("Thanks and regards,").append("\n");
+		sb.append("Rohlx Technologies");
+		return sb.toString();
 	}
 
 	public static String getGeneratedRequestNumber() {
@@ -22,9 +33,10 @@ public class EmailHelperUtil {
 		GregorianCalendar gc = (GregorianCalendar) Calendar.getInstance();
 		sb.append(prependZeros(gc.get(Calendar.MONTH) + 1))
 				.append(prependZeros(gc.get(Calendar.DATE)))
-				.append(gc.get(Calendar.HOUR)).append(gc.get(Calendar.MINUTE))
-				.append(gc.get(Calendar.SECOND)).append((int)Math.floor(Math.random()*10));
-		System.out.println(sb.toString());
+				.append(prependZeros(gc.get(Calendar.HOUR)))
+				.append(prependZeros(gc.get(Calendar.MINUTE)))
+				.append(prependZeros(gc.get(Calendar.SECOND)))
+				.append((int) Math.floor(Math.random() * 10));
 		return sb.toString();
 	}
 

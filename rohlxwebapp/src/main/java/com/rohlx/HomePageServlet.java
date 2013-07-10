@@ -55,25 +55,24 @@ public class HomePageServlet extends BasePageServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		
 		log.info(" Entering method : doPost");
-
-		mapRequestToBean(request.getParameterMap(),
-				HttpSessionHelper.getSession(request));
-
-		//
+		
+		Map<String,String> parameterMap = createMapFromRequestParameterMap(request);
 
 		String requestAlreadySubmitted = (String) request.getSession()
 				.getAttribute(REQUEST_ALREADY_SUBMITTED);
-		if (requestAlreadySubmitted == null) {
 
-			// Get the body of the message
-			Map<String, String[]> values = request.getParameterMap();
+		if (requestAlreadySubmitted == null) {
 
 			String requestNumber = EmailHelperUtil.getGeneratedRequestNumber();
 
-//			logger.log(Level.ERROR, "generated request no" + requestNumber);
+			log.info("generated request no" + requestNumber);
+			
+			mapRequestToBean(parameterMap,
+					HttpSessionHelper.getSession(request),requestNumber);
+
 
 			if (!validateForm(request, response)) {
-//				logger.log(Level.ERROR, "There are validation errors");
+				log.info("There are validation errors");
 				return;
 			}
 
@@ -85,10 +84,10 @@ public class HomePageServlet extends BasePageServlet {
 			// Call method to send email and other business process
 			if (PropertiesHelper.getPropertiesFile().getProperty("sendMail")
 					.equals("true")) {
-				status = EmailNotification.sendEmail("mgmuhilan@gmail.com",
+				status = EmailNotification.sendEmail("project@rohlx.com",
 						"project@rohlx.com", "New Web Request : "
 								+ requestNumber,
-						EmailHelperUtil.buildBody(values));
+						EmailHelperUtil.buildBody(parameterMap));
 			}
 
 			if (!status) {
@@ -107,6 +106,17 @@ public class HomePageServlet extends BasePageServlet {
 		}
 		response.sendRedirect("/servicerequest");
 		log.info("Exiting method : doPost");
+	}
+
+	private Map<String, String> createMapFromRequestParameterMap(
+			HttpServletRequest request) {
+		Map<String,String[]> map = request.getParameterMap();
+		Map<String,String> parameterMap = new HashMap<String,String>();
+		parameterMap.put("email",map.get("email")[0]);
+		parameterMap.put("phone",map.get("phone")[0]);
+		parameterMap.put("name",map.get("name")[0]);
+		parameterMap.put("message",map.get("message")[0]);
+		return parameterMap;
 	}
 
 	private void persistRecord(Map inputs) {
@@ -140,21 +150,22 @@ public class HomePageServlet extends BasePageServlet {
 			}
 
 			HttpSessionHelper.getSession(request).setAttribute("error", error);
-//			logger.log(Level.ERROR, "results" + error);
 			response.sendRedirect("/home");
 			return false;
 		}
 		return true;
 	}
 
-	private void mapRequestToBean(Map<String, String[]> parameterMap,
-			HttpSession session) {
+	private void mapRequestToBean(Map<String, String> parameterMap,
+			HttpSession session, String requestNumber) {
 		RequestForm rf = new RequestForm();
-		rf.setName(parameterMap.get("name")[0]);
-		rf.setPhone(parameterMap.get("phone")[0]);
-		rf.setEmail(parameterMap.get("email")[0]);
-		rf.setMessage(parameterMap.get("message")[0]);
-
+		
+		rf.setName(parameterMap.get("name"));
+		rf.setPhone(parameterMap.get("phone"));
+		rf.setEmail(parameterMap.get("email"));
+		rf.setMessage(parameterMap.get("message"));
+		rf.setRequestNumber(requestNumber);
+		
 		session.setAttribute("requestDetails", rf);
 
 	}

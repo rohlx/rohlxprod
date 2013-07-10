@@ -50,11 +50,11 @@
 			<div class="container">
 				<div class="row span6 center" id="alignImage">
 					<c:if test="${not empty error}">
-						<div class="red">Errors!!! Please scroll down to fix the
+						<div class="red toperror">Errors!!! Please scroll down to fix the
 							errors</div>
 					</c:if>
 					<img src="img/rohlx.jpg" />
-					<h1>Making a difference !!!!</h1>
+					<h1>IT made easy !!!</h1>
 					<p class="text">Our Mission is to maximize the business success
 						of our customers by providing quality software services,
 						installation and maintenance support and help our customers thus,
@@ -100,7 +100,7 @@
 		<div id="request" class="container-fluid">
 			<div class="container dark">
 				<h1>Service request form</h1>
-
+				<jsp:useBean id="requestDetails" class="com.rohlx.bean.RequestForm" scope="session"></jsp:useBean>
 				<div class="span5">
 					<form action="/home" method="post">
 						<div class="control-group">
@@ -109,7 +109,7 @@
 							<div class="controls">
 								<div class="red" id="name"><c:out value="${error.name}" /></div>
 								<input  type="text" placeholder="Name" id="inputName" name="name"
-									class="span4">
+									class="span4" value="${requestDetails.name}">
 							</div>
 						</div>
 						<div class="control-group">
@@ -117,7 +117,7 @@
 							<div class="controls">
 								<div class="red" id="name"><c:out value="${error.email}" /></div>
 								<input   type="text" placeholder="Email" id="inputEmail" name="email"
-									class="span4">
+									class="span4" value="${requestDetails.email}">
 							</div>
 						</div>
 						<div class="control-group">
@@ -126,7 +126,7 @@
 							<div class="controls">
 								<div class="red" id="name"><c:out value="${error.phone}" /></div>
 								<input  type="text" placeholder="Phone" id="inputPhone" name="phone"
-									class="span4">
+									class="span4" value="${requestDetails.phone}">
 							</div>
 						</div>
 						<div class="control-group">
@@ -135,7 +135,7 @@
 							<div class="controls">
 								<div class="red" id="name"><c:out value="${error.message}" /></div>
 								<textarea  class="span4" id="inputContact"
-									placeholder="Please give a brief description of service needed" name="message"></textarea>
+									placeholder="Please give a brief description of service needed" name="message">${requestDetails.message}</textarea>
 							</div>
 						</div>
 						<div class="control-group">
@@ -157,7 +157,7 @@
 						- 266006
 					</address>
 					<address>
-						<strong>email</strong> <a href="mailto:#">info@rohlx.com</a>
+						<strong>email</strong> <a href="mailto:info@rohlx.com">info@rohlx.com</a>
 					</address>
 				</div>
 			</div>
@@ -177,7 +177,7 @@
 					<p>Store Hours: 9:00 AM to 9:00 PM.</p>
 					<p>Closed on Sunday</p>
 					<address>
-						<strong>Email </strong><br> <a href="mailto:#">info@rohlx.com</a></br>
+						<strong>Email </strong><br> <a href="mailto:info@rohlx.com">info@rohlx.com</a></br>
 					</address>
 					<address>
 						<strong>Like us here</strong> <a

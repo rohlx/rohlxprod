@@ -24,6 +24,11 @@
   src: local('Raleway ExtraLight'), local('Raleway-ExtraLight'), url(./fonts/Raleway.woff) format('woff');
 }
 
+.toperror{
+	font-size: 15px;
+	margin-top: 10px;
+}
+
 #addressinfo
 {
   float:left;
@@ -73,7 +78,7 @@ a > hover#openmaps{
 .banner
 {
   /*color: #A43053; */
-  color:#CCCCCC !important;
+ /* color:#CCCCCC !important; */
  text-decoration: none;
   font-size: 20px;
   display: inline;
