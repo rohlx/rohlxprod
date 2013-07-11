@@ -4,11 +4,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	version="2.5">
 	<display-name>rohlxwebapp</display-name>
-	
-	 <listener>
+
+	<listener>
 		<listener-class>org.apache.tiles.web.startup.TilesListener</listener-class>
-	</listener> 
-	
+	</listener>
+
 	<context-param>
 		<param-name>org.apache.tiles.definition.DefinitionsFactory.DEFINITIONS_CONFIG</param-name>
 		<param-value>/WEB-INF/tiles.xml</param-value>
@@ -36,4 +36,7 @@
 		<servlet-name>ServiceRequestHandler</servlet-name>
 		<url-pattern>/servicerequest</url-pattern>
 	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>redirect.jsp</welcome-file>
+	</welcome-file-list>
 </web-app>

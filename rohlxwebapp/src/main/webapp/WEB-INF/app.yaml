@@ -1,0 +1,25 @@
+application: rohlxonline
+version: 29
+runtime: java
+threadsafe: true 
+
+handlers:
+- url: /*
+
+- url: /home/*
+  servlet: com.rohlx.HomePageServlet
+  
+- url: /servicerequest/*
+  servlet: com.rohlx.ServiceRequestHandler 
+
+
+welcome_files:
+  - redirect.jsp
+  
+context_params:
+  org.apache.tiles.definition.DefinitionsFactory.DEFINITIONS_CONFIG: /WEB-INF/tiles.xml
+  
+listeners:  
+ - org.apache.tiles.web.startup.TilesListener
+ 
+  
