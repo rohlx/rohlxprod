@@ -14,8 +14,8 @@ public class EmailHelperUtil {
 
 		StringBuilder sb = new StringBuilder();
 		sb.append("Dear Rohlx Service Engineers,").append("\n\n")
-				.append("Please find the message from customer <strong>")
-				.append(name).append("<strong>").append(".").append("\n\n");
+				.append("Please find the message from customer : ")
+				.append(name).append(".").append("\n\n");
 
 		sb.append("Message :").append(message).append("\n\n");
 		sb.append("Phone Number :").append(phone).append("\n\n");

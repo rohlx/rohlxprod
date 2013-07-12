@@ -1,5 +1,6 @@
 package com.rohlx.util.email;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -37,13 +38,20 @@ public class EmailNotification {
 
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					aToEmailAddr));
+
+			message.setFrom(new InternetAddress(aFromEmailAddr, "Rohlx Website"));
+
 			message.setSubject(aSubject);
 			message.setText(aBody);
 			Transport.send(message);
 		} catch (MessagingException ex) {
 			log.fatal("unable to send email", ex);
 			emailSent = false;
+		} catch (UnsupportedEncodingException uee) {
+			log.fatal("unable to send email", uee);
+			emailSent = false;
 		}
+
 		return emailSent;
 	}
 
