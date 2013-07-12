@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,8 +32,7 @@ import com.rohlx.util.email.EmailNotification;
 public class HomePageServlet extends BasePageServlet {
 	private static final long serialVersionUID = 1L;
 
-	 static Logger log = Logger.getLogger(
-			 HomePageServlet.class.getName());
+	static Logger log = Logger.getLogger(HomePageServlet.class.getName());
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -41,8 +41,9 @@ public class HomePageServlet extends BasePageServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		log.info(" Entering method : doGet");
-		
-		createTilesContainer(request).render("homeresponse", request,response);
+
+		createTilesContainer(request).render("homeresponse", request, response);
+		request.getSession().setAttribute("requestDetails", new RequestForm());
 
 		log.info("Exiting method : doGet");
 	}
@@ -53,75 +54,70 @@ public class HomePageServlet extends BasePageServlet {
 	 */
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		log.info(" Entering method : doPost");
-		
-		Map<String,String> parameterMap = createMapFromRequestParameterMap(request);
 
-		String requestAlreadySubmitted = (String) request.getSession()
-				.getAttribute(REQUEST_ALREADY_SUBMITTED);
+			log.info(" Entering method : doPost");
 
-		if (requestAlreadySubmitted == null) {
+			Map<String, String> parameterMap = createMapFromRequestParameterMap(request);
 
 			String requestNumber = EmailHelperUtil.getGeneratedRequestNumber();
 
 			log.info("generated request no" + requestNumber);
-			
-			mapRequestToBean(parameterMap,
-					HttpSessionHelper.getSession(request),requestNumber);
 
+			mapRequestToBean(parameterMap,
+					HttpSessionHelper.getSession(request), requestNumber);
 
 			if (!validateForm(request, response)) {
-				log.info("There are validation errors");
-				return;
-			}
+				log.warn("There are validation errors");
+				createTilesContainer(request).render("homeresponse", request, response);
+				log.info("Exiting method : before forward");
 
-			// StoreServiceRequestRESTClient.storeRequest(requestNumber,
-			// createMap(values));
-			//
-			// persistRecord(request.getParameterMap());
-			boolean status = false;
-			// Call method to send email and other business process
-			if (PropertiesHelper.getPropertiesFile().getProperty("sendMail")
-					.equals("true")) {
-				status = EmailNotification.sendEmail("project@rohlx.com",
-						"project@rohlx.com", "New Web Request : "
-								+ requestNumber,
-						EmailHelperUtil.buildBody(parameterMap));
-			}
-
-			if (!status) {
-				throw new RuntimeException();
 			} else {
-				request.getSession().setAttribute("requestNumber",
-						requestNumber);
+
+				String requestAlreadySubmitted = (String) request.getSession()
+						.getAttribute(REQUEST_ALREADY_SUBMITTED);
+
+				if (requestAlreadySubmitted == null) {
+
+					boolean status = false;
+					// Call method to send email and other business process
+					if (PropertiesHelper.getPropertiesFile()
+							.getProperty("sendMail").equals("true")) {
+						status = EmailNotification.sendEmail(
+								"project@rohlx.com", "project@rohlx.com",
+								"New Web Request : " + requestNumber,
+								EmailHelperUtil.buildBody(parameterMap));
+					}
+
+					if (!status) {
+						throw new RuntimeException();
+					} else {
+						request.getSession().setAttribute("requestNumber",
+								requestNumber);
+					}
+
+					request.getSession().setAttribute(
+							REQUEST_ALREADY_SUBMITTED, "false");
+				}
+
+				else if ("false".equals(requestAlreadySubmitted)) {
+					request.getSession().setAttribute(
+							REQUEST_ALREADY_SUBMITTED, "true");
+				}
+				response.sendRedirect("/servicerequest");
+				log.info("Exiting method : before redirect");
 			}
-
-			request.getSession().setAttribute(REQUEST_ALREADY_SUBMITTED,
-					"false");
-
-		} else if ("false".equals(requestAlreadySubmitted)) {
-			request.getSession()
-					.setAttribute(REQUEST_ALREADY_SUBMITTED, "true");
-		}
-		response.sendRedirect("/servicerequest");
-		log.info("Exiting method : doPost");
+		
 	}
 
 	private Map<String, String> createMapFromRequestParameterMap(
 			HttpServletRequest request) {
-		Map<String,String[]> map = request.getParameterMap();
-		Map<String,String> parameterMap = new HashMap<String,String>();
-		parameterMap.put("email",map.get("email")[0]);
-		parameterMap.put("phone",map.get("phone")[0]);
-		parameterMap.put("name",map.get("name")[0]);
-		parameterMap.put("message",map.get("message")[0]);
+		Map<String, String[]> map = request.getParameterMap();
+		Map<String, String> parameterMap = new HashMap<String, String>();
+		parameterMap.put("email", map.get("email")[0]);
+		parameterMap.put("phone", map.get("phone")[0]);
+		parameterMap.put("name", map.get("name")[0]);
+		parameterMap.put("message", map.get("message")[0]);
 		return parameterMap;
-	}
-
-	private void persistRecord(Map inputs) {
-		MongoDBDAO.insertRequestData(inputs);
-
 	}
 
 	private boolean validateForm(HttpServletRequest request,
@@ -149,8 +145,8 @@ public class HomePageServlet extends BasePageServlet {
 				}
 			}
 
-			HttpSessionHelper.getSession(request).setAttribute("error", error);
-			response.sendRedirect("/home");
+			request.setAttribute("error", error);
+
 			return false;
 		}
 		return true;
@@ -159,13 +155,13 @@ public class HomePageServlet extends BasePageServlet {
 	private void mapRequestToBean(Map<String, String> parameterMap,
 			HttpSession session, String requestNumber) {
 		RequestForm rf = new RequestForm();
-		
+
 		rf.setName(parameterMap.get("name"));
 		rf.setPhone(parameterMap.get("phone"));
 		rf.setEmail(parameterMap.get("email"));
 		rf.setMessage(parameterMap.get("message"));
 		rf.setRequestNumber(requestNumber);
-		
+
 		session.setAttribute("requestDetails", rf);
 
 	}
