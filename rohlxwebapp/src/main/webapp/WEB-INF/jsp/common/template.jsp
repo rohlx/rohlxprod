@@ -17,7 +17,8 @@
 <body>
 
 <tiles:insertAttribute name="body" />
-
+<div>© 2013 Rohlx. All Rights Reserved.</div>
+<div style="font-size: 10px;">This site is viewed best in IE 9, FF ,Safari or Chrome or above</div>
 </body>
 
 <%-- js imports --%>
